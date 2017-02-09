@@ -1,0 +1,30 @@
+{
+  "name": "ニコ生継続プレイ",
+  "version": "1.0.0",
+  "manifest_version": 2,
+  "description": "次枠に移動します。",
+  "permissions": [
+    "declarativeContent",
+    "alarms",
+    "tabs",
+    "webNavigation",
+    "activeTab"
+   ],
+  "icons": {
+    "128": "icon.png"
+  },
+  "background": {
+    "persistent": false,
+    "page": "background.html"
+  },
+  "page_action": {
+    "default_icon": "icon.png",
+    "default_title": "niconico live continue play"
+  },
+  "content_scripts": [
+    {
+      "matches": ["http://live.nicovideo.jp/watch/*"],
+      "js": ["contents.js"]
+    }
+  ]
+}
