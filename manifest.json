@@ -1,6 +1,6 @@
 {
   "name": "ニコ生継続プレイ",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "manifest_version": 2,
   "description": "次枠に移動します。",
   "permissions": [
@@ -14,7 +14,7 @@
     "128": "icon.png"
   },
   "background": {
-    "persistent": false,
+    "persistent": true,
     "page": "background.html"
   },
   "page_action": {
@@ -23,7 +23,7 @@
   },
   "content_scripts": [
     {
-      "matches": ["http://live.nicovideo.jp/watch/*"],
+      "matches": ["http://*.nicovideo.jp/*"],
       "js": ["contents.js"]
     }
   ]

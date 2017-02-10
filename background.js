@@ -57,7 +57,9 @@ function getLiveURL(tabid) {
     var liveURL__ = liveURLs[commURL__];
 
     console.log('liveURLs  ['+commURL__+'] ' + liveURL__);
-    if (liveURL__ && liveURL__ !== tabURL__) {
+    var tabLv_ =  tabURL__.match(/lv\d+$/)[0];
+    var liveLv_ =  liveURL__.match(/lv\d+$/)[0];
+    if (liveLv_ && liveLv_ != tabLv_) {
       console.log("tabs.update " + tabid);
       chrome.tabs.update(parseInt(tabid, 10), { url: liveURL__ });
     }
@@ -75,15 +77,10 @@ function getLiveURL(tabid) {
       }
     };
 
-    xhr.onerror = function(error) {
-      handleError();
-    };
-
     xhr.open("GET", getFeedUrl(commURL_), true);
     xhr.send(null);
   } catch(e) {
-    console.error("gmailcheck_exception ", e);
-    handleError();
+    console.error("exception ", e);
   }
 }
 
@@ -162,7 +159,7 @@ function manageTab(tab) {
   if (tab.id && tab.url) {
     tabURL = tab.url.toString().replace(/\?.*$/,"");
     console.log('tabURL ' + tabURL);
-    if (tabURL && tabURL.match(/http:\/\/live.nicovideo.jp\/watch\/(lv\d+)/)) {
+    if (tabURL && tabURL.match(/http:\/\/\w+.nicovideo.jp\/\w+\/(lv\d+)/)) {
       if (tabURLs[tabid] !== tabURL) {
         var tabURL_ = tabURLs[tabid];
         var commURL_ = commURLs[tabURL_];
@@ -197,6 +194,7 @@ chrome.tabs.onUpdated.addListener(function(tabid, changeInfo, tab) {
   console.log('chrome.tabs.onUpdated ' + tabid + " " + changeInfo.status );
   if ( changeInfo.status === "complete") {
     manageTab(tab);
+    startRequest({scheduleRequest:true});
   }
 });
 

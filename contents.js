@@ -7,8 +7,16 @@ function getCommURL() {
     url = elements2[0].href;
   } else {
     elements = document.getElementsByClassName('smn') ;
-    var elements2 = elements[0].getElementsByTagName('a');
-    url = elements2[0].href;
+   if (elements.length > 0) {
+      var elements2 = elements[0].getElementsByTagName('a');
+      url = elements2[0].href;
+   } else {
+      elements = document.getElementsByClassName('community-info-title') ;
+     if (elements.length > 0) {
+        var elements2 = elements[0].getElementsByTagName('a');
+        url = elements2[0].href;
+     }
+   }
   }
 
   console.log("url "+url);
