@@ -141,13 +141,11 @@ function onWatchdog() {
   });
 }
 
+chrome.alarms.onAlarm.addListener(onAlarm);
 
 chrome.runtime.onInstalled.addListener(function() {
   console.log('chrome.runtime.onInstalled.addListener');
 
-  if (!chrome.alarms.onAlarm.hasListener(onAlarm)) {
-    chrome.alarms.onAlarm.addListener(onAlarm);
-  }
   startRequest({scheduleRequest:true});
   chrome.alarms.create('watchdog', {periodInMinutes:5});
 });
