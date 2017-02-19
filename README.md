@@ -24,5 +24,6 @@ google chrome の拡張機能として以下の機能を提供します。
 
 ## 履歴
 
-1.0.1 bugfix.
-1.0.2 bugfix.
+1.0.1 bugfix.  
+1.0.2 bugfix.  
+1.0.3 change timeout value.  

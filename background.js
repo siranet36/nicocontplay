@@ -1,5 +1,5 @@
 var pollInterval = 1;  // minute
-var requestTimeout = 1000 * 2;  // 2 seconds
+var requestTimeout = 1000 * 5;  // 5 seconds
 var tabURLs = {};
 var commURLs = {};
 var liveURLs = {};
@@ -43,6 +43,7 @@ function getLiveURL(tabid) {
   var xhr = new XMLHttpRequest();
   var abortTimerId = window.setTimeout(function() {
     xhr.abort();
+    startRequest({scheduleRequest:true});
   }, requestTimeout);
 
   var liveURL_;
@@ -69,11 +70,13 @@ function getLiveURL(tabid) {
     xhr.onreadystatechange = function() {
       if (xhr.readyState != 4)
         return;
-
+      console.log('xhr.readyState ' + xhr.readyState);
       var result = JSON.parse(xhr.responseText).query.results;
       if (result !== null) {
           liveURL_ = result.a[0].href.replace(/\?.*$/,"");
-          handleSuccess();
+          if (liveURL_ !== null) {
+            handleSuccess();
+          }
       }
     };
 
