@@ -31,6 +31,7 @@ function getCommURL(tabid) {
 }
 
 function getFeedUrl(url) {
+  console.log("https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20html%20where%20url%3D%22"+encodeURIComponent(url)+"?rnd="+new Date().getTime()+"%22%20and%20xpath%3D%22%2F%2Fa%5B%40class%3D'now_live_inner'%5D%22&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys");
   return "https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20html%20where%20url%3D%22"+encodeURIComponent(url)+"?rnd="+new Date().getTime()+"%22%20and%20xpath%3D%22%2F%2Fa%5B%40class%3D'now_live_inner'%5D%22&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys";
 }
 
