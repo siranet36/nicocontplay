@@ -27,4 +27,5 @@ google chrome の拡張機能として以下の機能を提供します。
 1.0.1 bugfix.  
 1.0.2 bugfix.  
 1.0.3 change timeout value.  
-1.0.4 add log.
+1.0.4 add log.  
+1.0.5 bugfix.  

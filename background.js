@@ -1,5 +1,5 @@
 var pollInterval = 1;  // minute
-var requestTimeout = 1000 * 5;  // 5 seconds
+var requestTimeout = 1000 * 2;  // 2 seconds
 var tabURLs = {};
 var commURLs = {};
 var liveURLs = {};
@@ -44,7 +44,6 @@ function getLiveURL(tabid) {
   var xhr = new XMLHttpRequest();
   var abortTimerId = window.setTimeout(function() {
     xhr.abort();
-    startRequest({scheduleRequest:true});
   }, requestTimeout);
 
   var liveURL_;
@@ -109,19 +108,19 @@ function onWatchdog() {
   console.log('onWatchdog');
 
   chrome.tabs.query({},function(tabs){
-    tabs.forEach(function(tab){
+    for (var tabid in tabURLs) {
       var count = 0;
-      for (var tabid in tabURLs) {
+      tabs.forEach(function(tab){
         console.log('tabid '+tabid +' tab.id '+tab.id);
         if (tabid == tab.id){
           count++;
         }
-      }
+      });
       if (count == 0) {
-        console.log('clear '+tab.id);
-        var tabURL_ = tabURLs[tab.id];
+        console.log('clear '+tabid);
+        var tabURL_ = tabURLs[tabid];
         var commURL_ = commURLs[tabURL_];
-        if (tab.id in tabURLs) {
+        if (tabid in tabURLs) {
           delete tabURLs[tabid];
         }
         if (tabURL_ in commURLs) {
@@ -131,7 +130,7 @@ function onWatchdog() {
           delete liveURLs[commURL_];
         }
       }
-    });
+    }
   });
 
   chrome.alarms.get('refresh', function(alarm) {
