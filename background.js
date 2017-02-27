@@ -3,6 +3,10 @@ var requestTimeout = 1000 * 2;  // 2 seconds
 var tabURLs = {};
 var commURLs = {};
 var liveURLs = {};
+var retryN = 10;
+var retryTimeout = 1000 * 7;  // 10 seconds
+var failCounts = {};
+var retryTimerId;
 
 function startRequest(params) {
   console.log('startRequest');
@@ -73,10 +77,22 @@ function getLiveURL(tabid) {
       console.log('xhr.readyState ' + xhr.readyState);
       var result = JSON.parse(xhr.responseText).query.results;
       if (result !== null) {
-          liveURL_ = result.a[0].href.replace(/\?.*$/,"");
-          if (liveURL_ !== null) {
-            handleSuccess();
+        liveURL_ = result.a[0].href.replace(/\?.*$/,"");
+        if (liveURL_ !== null) {
+          handleSuccess();
+          failCounts[commURL_] = 0;
+        }
+      } else {
+        failCounts[commURL_] = failCounts[commURL_] + 1;
+        console.log('failCounts['+commURL_+'] ' + failCounts[commURL_]);
+        if (failCounts[commURL_] <= retryN) {
+          if (retryTimerId) {
+            window.clearTimeout(retryTimerId);
           }
+          retryTimerId = window.setTimeout(function() {
+            startRequest({scheduleRequest:true});
+          }, retryTimeout);
+        }
       }
     };
 
@@ -171,6 +187,9 @@ function manageTab(tab) {
         if (commURL_ in liveURLs) {
           delete liveURLs[commURL_];
         }
+        if (commURL_ in failCounts) {
+          delete failCounts[commURL_];
+        }
 
         tabURLs[tabid] = tabURL;
       }
@@ -186,6 +205,9 @@ function manageTab(tab) {
       }
       if (commURL_ in liveURLs) {
         delete liveURLs[commURL_];
+      }
+      if (commURL_ in failCounts) {
+        delete failCounts[commURL_];
       }
     }
   }
